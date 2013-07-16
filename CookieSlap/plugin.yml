@@ -1,0 +1,12 @@
+name: CookieSlap
+version: 1.0
+main: org.cookieslap.main.CookieMain
+authors: [Rage_Master14,Xquiset]
+description: Fully Automated CookieSlap Plugin!
+
+commands:
+    CookieSlap:
+        description: CookieSlap Command
+        usage: /cs <command> <args>
+        aliases: [cs, CookieSlap]
+
