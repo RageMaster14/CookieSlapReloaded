@@ -9,4 +9,5 @@ commands:
         description: CookieSlap Command
         usage: /cs <command> <args>
         aliases: [cs, CookieSlap]
+        
 

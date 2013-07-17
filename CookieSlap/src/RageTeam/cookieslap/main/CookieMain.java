@@ -1,4 +1,4 @@
-package org.cookieslap.main;
+package RageTeam.cookieslap.main;
 
 import java.util.logging.Logger;
 
@@ -11,6 +11,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CookieMain extends JavaPlugin{
 	public final Logger logger = Logger.getLogger("Minecraft");
+
+	public Object chat;
+
+	public Object playerManager;
+
+	public Object cfgManager;
 	
 	public static CookieMain plugin;
 	
