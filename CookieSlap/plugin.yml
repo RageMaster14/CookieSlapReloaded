@@ -1,7 +1,7 @@
 name: CookieSlap
 version: 1.0
 main: org.cookieslap.main.CookieMain
-authors: [Rage_Master14,Xquiset]
+authors: [Rage_Master14,Xquiset,TheMinersDomain]
 description: Fully Automated CookieSlap Plugin!
 
 commands:
