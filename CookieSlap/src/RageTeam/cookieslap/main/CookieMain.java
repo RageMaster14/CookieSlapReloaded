@@ -28,6 +28,8 @@ public class CookieMain extends JavaPlugin{
 	
 
 	public static boolean canStart;
+
+	public static int timeInSeconds;
 	
 	@Override
 	public void onDisable(){
