@@ -22,20 +22,13 @@ public class CookieMain extends JavaPlugin{
 	public static Scoreboard main;
 	
 	public static int players = 0;
-	public static int gameLoop;
 	
 	public static CookieMain plugin;
-	
-
-	public static boolean canStart;
-
-	public static int timeInSeconds;
 	
 	@Override
 	public void onDisable(){
 		PluginDescriptionFile pdf = this.getDescription();
 		this.logger.info(pdf.getName() + " v" + pdf.getVersion() + " Has Been Disabled!");
-		getServer().getScheduler().cancelTask(gameLoop);
 		
 	}
 	
@@ -43,22 +36,13 @@ public class CookieMain extends JavaPlugin{
 	public void onEnable(){
 		PluginDescriptionFile pdf = this.getDescription();
 		this.logger.info(pdf.getName() + " v" + pdf.getVersion() + " Has Been Enabled!");
-		canStart = false;
 	}
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event){
-		players ++;
-		Player player = event.getPlayer();
-		player.setScoreboard(main);
-		if(Bukkit.getOnlinePlayers().length >= 6)
-		canStart = true;
 	}
 	
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event){
-		players --;
-		if(Bukkit.getOnlinePlayers().length - 1 >= 6)
-		canStart = false;
 	}
 }
