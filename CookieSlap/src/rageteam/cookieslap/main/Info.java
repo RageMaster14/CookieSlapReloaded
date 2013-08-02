@@ -7,7 +7,7 @@ public class Info {
 	public static String description = "A Reloaded version of CookieSlap";
 	public static String version = "0.0.1a";
 	public static String author = "RageTeam";
-	public static String[] authors = {"Xquiset", "RageMaster14", "TheMinecraftDomain"};
+	public static String[] authors = {"Xquiset", "RageMaster_14", "TheMinecraftDomain"};
 	public static String prefix = "CS";
 	
 	public static File logFile = new File("CS-Log.log");

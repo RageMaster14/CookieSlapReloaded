@@ -1,5 +1,9 @@
-players:
+ players:
     Xquiset:
+       rank: STAFF
+       wins: 0
+       loses: 0
+Rage_Master14:
         rank: STAFF
         wins: 0
         loses: 0

@@ -1,5 +1,5 @@
 server:
-    min-players: 2
+    min-players: 8
 
 chat:
     chat-format: '<prefix><username>&7: &f<message>'

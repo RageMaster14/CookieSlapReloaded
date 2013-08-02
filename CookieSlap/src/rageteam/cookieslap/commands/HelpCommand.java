@@ -19,7 +19,7 @@ public class HelpCommand implements CommandExecutor {
 		if (args.length > 1) { 
 			sender.sendMessage(Messages.WRONG_SYNTAX); return true;
 		}
-		if (!sender.hasPermission("sg.help")) {
+		if (!sender.hasPermission("cs.help")) {
 			sender.sendMessage(Messages.NOT_ENOUGH_PERMISSIONS); return true;
 		}
 		

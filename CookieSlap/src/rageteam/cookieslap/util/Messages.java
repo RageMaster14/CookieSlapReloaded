@@ -10,5 +10,5 @@ public class Messages {
 	
 	public static String NOT_ENOUGH_PERMISSIONS = "&cYou don't have enough permissions to perform this command!";
 	
-	public static String WRONG_SYNTAX = "&cWrong command syntax! Please use &a/help&c!";
+	public static String WRONG_SYNTAX = "&cWrong command syntax! Please use &a/CookieSlap help&c!";
 }
