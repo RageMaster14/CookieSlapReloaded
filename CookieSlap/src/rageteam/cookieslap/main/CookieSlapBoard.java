@@ -30,7 +30,7 @@ public class CookieSlapBoard extends JavaPlugin{
 		board = manager.getNewScoreboard();
 		obj = board.registerNewObjective("CookieSlap", "dummy");
 		
-		obj.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "  CookieSlap ");
+		obj.setDisplayName(ChatColor.GRAY +  "  /toggleboard  " + ChatColor.WHITE + " to hide");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		final Score time = obj.getScore(getServer().getOfflinePlayer(ChatColor.LIGHT_PURPLE + "Time Left:" + ChatColor.RED));
