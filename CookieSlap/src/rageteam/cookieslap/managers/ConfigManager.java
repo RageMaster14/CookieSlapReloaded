@@ -37,16 +37,15 @@ public String chatFormat;
 		this.prefixes[2] = cfg.getString("chat.prefixes.staff");
 		
 		this.motds[0] = cfg.getString("motds.lobby");
-		this.motds[1] = cfg.getString("motds.pregame");
-		this.motds[2] = cfg.getString("motds.ingame");
-		this.motds[4] = cfg.getString("motds.endgame");
+		this.motds[1] = cfg.getString("motds.ingame");
+		this.motds[2] = cfg.getString("motds.endgame");
 		
 		this.messages[0] = cfg.getString("messages.player-join");
 		this.messages[1] = cfg.getString("messages.player-quit");
 		
 		this.times[0] = cfg.getInt("times.lobby");
-		this.times[1] = cfg.getInt("times.pregame");
-		this.times[2] = cfg.getInt("times.ingame");
+		this.times[1] = cfg.getInt("times.ingame");
+		this.times[2] = cfg.getInt("times.endgame");
 		
 		this.minPlayers = cfg.getInt("server.min-players");
 		

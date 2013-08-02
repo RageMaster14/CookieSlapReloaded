@@ -1,0 +1,23 @@
+arenas:
+    world:
+        label: 'World'
+        spawn-points:
+            spawn-points-count: 6
+            point1:
+                loc: [0.00, 0.00, 0.00]
+                view: [0.0, 0.0]
+            point2: 
+                loc: [0.00, 0.00, 0.00]
+                view: [0.0, 0.0]
+            point3: 
+                loc: [0.00, 0.00, 0.00]
+                view: [0.0, 0.0]
+            point4: 
+                loc: [0.00, 0.00, 0.00]
+                view: [0.0, 0.0]
+            point5: 
+                loc: [0.00, 0.00, 0.00]
+                view: [0.0, 0.0]
+            point6: 
+                loc: [0.00, 0.00, 0.00]
+                view: [0.0, 0.0]

@@ -3,6 +3,9 @@ package rageteam.cookieslap.main;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import rageteam.cookieslap.commands.HelpCommand;
+import rageteam.cookieslap.handlers.PlayerHandler;
+import rageteam.cookieslap.handlers.ServerHandler;
+import rageteam.cookieslap.managers.ArenasManager;
 import rageteam.cookieslap.managers.ConfigManager;
 import rageteam.cookieslap.managers.PlayerManager;
 import rageteam.cookieslap.objects.GameState;
@@ -19,10 +22,13 @@ public class CS extends JavaPlugin{
 	public HelpCommand cmdHelp;
 	
 	//Handler Classes
+	public ServerHandler serverHandler;
+	public PlayerHandler playerHandler;
 	
 	//Manager Classes
 	public PlayerManager playerManager;
 	public ConfigManager cfgManager;
+	public ArenasManager arenasmanager;
 	
 	//Util Classes
 	public Chat chat;
@@ -43,9 +49,15 @@ public class CS extends JavaPlugin{
 		
 		this.playerManager = new PlayerManager(this);
 		this.cfgManager = new ConfigManager(this);
+		this.arenasmanager = new ArenasManager(this);
+		
+		this.playerHandler = new PlayerHandler(this);
+		this.serverHandler = new ServerHandler(this);
 	}
 	
 	private void loadHandlers(){
+		getServer().getPluginManager().registerEvents(playerHandler, this);
+		getServer().getPluginManager().registerEvents(serverHandler, this);
 	}
 	
 	private void registerCommands(){
