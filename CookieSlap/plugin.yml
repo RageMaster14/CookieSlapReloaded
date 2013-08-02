@@ -1,11 +1,18 @@
 name: CookieSlap
-version: 1.0
-main: RageTeam.cookieslap.main.CookieMain
-authors: [Rage_Master14,Xquiset,TheMinersDomain]
-description: Fully Automated CookieSlap Plugin!
+description: A Reloaded version of CookieSlap!
+authors: [Xquiset, RageMaster14, TheMinecraftDomain]
+version: 0.0.1a
+prefix: CS
+
+load: STARTUP
+main: rageteam.cookieslap.CS
+database: false
 
 commands:
-    CookieSlap:
-        description: CookieSlap Command
-        usage: /cs <command> <args>
-        aliases: [cs, CookieSlap]
+    help:
+        permission: cs.help
+
+permissions:
+    sg.user:
+        children:
+            cs.help: true
