@@ -11,8 +11,11 @@ database: false
 commands:
     help:
         permission: cs.help
+    toggleboard:
+        permission: cs.toggle
 
 permissions:
-    sg.user:
+    cs.user:
         children:
             cs.help: true
+            cs.toggle: true

@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.util.logging.Level;
 
 import rageteam.cookieslap.main.Info;
-import rageteam.cookieslap.util.Messages;
 import rageteam.cookieslap.main.CS;
 
 public class Logger {
@@ -33,10 +32,10 @@ public class Logger {
 	}
 	
 	public void logError(Exception ex) {
-		log(true, Messages.ERROR_OCCOURRED);
+		log(true, "Error");
 		
 		String message =
-				"---------------| " + plugin.misc.getTime() + " |---------------\n" +
+				"--------------------| ERROR |---------------------\n" +
 				"-----( Error Message )-----\n" + ex.getMessage() + "\n\n\n\n\n";
 		
 		logToFile(Info.errorlogFile, message);		
