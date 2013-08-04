@@ -101,6 +101,7 @@ public class CS extends JavaPlugin{
 				if(timeInSeconds != -1){
 					if(timeInSeconds != 0){
 						time.setScore(timeInSeconds);
+						timeInSeconds--;
 					} else if(timeInSeconds <= 10 && timeInSeconds > 0){
 						note();
 					}
