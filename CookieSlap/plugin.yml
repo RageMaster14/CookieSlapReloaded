@@ -5,7 +5,7 @@ version: 0.0.1a
 prefix: CS
 
 load: STARTUP
-main: rageteam.cookieslap.CS
+main: rageteam.cookieslap.main.CS
 database: false
 
 commands:
