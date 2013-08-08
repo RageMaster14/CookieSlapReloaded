@@ -11,12 +11,17 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
+import rageteam.cookieslap.commands.ToggleCommand;
+import rageteam.cookieslap.listeners.PlayerListener;
 import rageteam.cookieslap.util.Logger;
 
 public class CS extends JavaPlugin{
 	
 	//Util Classes
 	public Logger logger;
+	
+	//Commands
+	public ToggleCommand toggle;
 	
 	//Scoreboard
 	public ScoreboardManager manager;
@@ -27,14 +32,33 @@ public class CS extends JavaPlugin{
 	public int highScore = 0;
 	public int arenaID = 0;
 	
+	//Listeners
+	public PlayerListener pListener;
+	
 	private void loadDependicies(){
 		
 		this.logger = new Logger(this);
+		
+		this.pListener = new PlayerListener(this);
+		
+		this.toggle = new ToggleCommand(this);
+	
+	}
+	
+	private void loadListeners(){
+		getServer().getPluginManager().registerEvents(pListener, this);
+	}
+	
+	private void registerCommands(){
+		getCommand("toggleboard").setExecutor(toggle);
+		
 	}
 	
 	@Override
 	public void onEnable(){
 		loadDependicies();
+		loadListeners();
+		registerCommands();
 		
 		logger.log(false, "Loading CS Dependicies");
 		
@@ -78,7 +102,7 @@ public class CS extends JavaPlugin{
 		
 		public void note() {
 			for(Player player : Bukkit.getOnlinePlayers()){
-				player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 10, 1);
+				player.playSound(player.getLocation(), Sound.CLICK, 10, 1);
 			}
 	}
 	
