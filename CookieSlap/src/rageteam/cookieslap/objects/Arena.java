@@ -1,20 +1,27 @@
 package rageteam.cookieslap.objects;
 
-import org.bukkit.Location;
+import org.bukkit.plugin.Plugin;
 
 public class Arena {
-	public String name;
-	public String label;
-	public Location[] spawnpoint;
-	
-	/**
-	 * 
-	 * @param label Maps' label
-	 * @param name Maps' directory name
-	 * @param spawnpoints Spawns location
-	 */
-	public Arena(String name, String label) {
-		this.name = name;
-		this.label = label;
-	}	
+	private String name = null;
+    private Plugin plugin = null;
+
+    public Arena(String name, Plugin plugin)
+    {
+	this.name = name;
+
+	this.plugin = plugin;
+
+	plugin.saveConfig();
+    }
+
+    public String getName()
+    {
+	return name;
+    }
+
+    public Plugin getPlugin()
+    {
+	return plugin;
+    }
 }

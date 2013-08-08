@@ -1,9 +1,0 @@
-arenas:
-    world:
-        label: 'World'
-        spawn-points:
-            spawn-points-count: 1
-            point1:
-                loc: [0.00, 0.00, 0.00]
-                view: [0.0, 0.0]
-         

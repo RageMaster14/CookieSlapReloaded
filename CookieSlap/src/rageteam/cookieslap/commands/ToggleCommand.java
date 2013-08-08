@@ -1,11 +1,11 @@
 package rageteam.cookieslap.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
-
 import rageteam.cookieslap.main.CS;
 
 public class ToggleCommand implements CommandExecutor{
@@ -15,7 +15,10 @@ public class ToggleCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String cL, String[] args) {
 		Player player = (Player) sender;
+		
 		player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+		player.sendMessage(ChatColor.RED + "Scoreboard Disabled!");
+		
 		return false;
-	} 
+	}
 }
