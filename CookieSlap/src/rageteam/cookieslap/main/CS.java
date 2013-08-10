@@ -18,8 +18,6 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-import rageteam.cookieslap.commands.ToggleCommand;
-import rageteam.cookieslap.listeners.PlayerListener;
 import rageteam.cookieslap.util.Logger;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
@@ -28,10 +26,6 @@ public class CS extends JavaPlugin{
 	
 	//Util Classes
 	public Logger logger;
-	
-	//Commands
-	public ToggleCommand toggle;
-	public CSCommandExecutor executor;
 	
 	//Scoreboard
 	public ScoreboardManager manager;
@@ -42,8 +36,6 @@ public class CS extends JavaPlugin{
 	public int highScore = 0;
 	public int arenaID = 0;
 	
-	//Listeners
-	public PlayerListener pListener;
 	
 	//Config's
 	public static File pluginFolder;
@@ -58,19 +50,12 @@ public class CS extends JavaPlugin{
 	private void loadDependicies(){
 		
 		this.logger = new Logger(this);
-		
-		this.pListener = new PlayerListener(this);
-		
-		this.toggle = new ToggleCommand(this);
-		this.executor = new CSCommandExecutor(this);
 	}
 	
 	private void loadListeners(){
-		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 	}
 	
 	private void registerCommands(){
-		getCommand("cs").setExecutor(executor);
 		
 	}
 	
@@ -87,7 +72,7 @@ public class CS extends JavaPlugin{
 		board = manager.getNewScoreboard();
 		obj = board.registerNewObjective("CookieSlap", "dummy");
 		
-		obj.setDisplayName(ChatColor.GRAY +  "/toggleboard" + ChatColor.WHITE + " to hide");
+		obj.setDisplayName(ChatColor.GRAY +  "/cslap toggleboard" + ChatColor.WHITE + " to hide");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		final Score time = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.LIGHT_PURPLE + "Time Left:" + ChatColor.RED));
