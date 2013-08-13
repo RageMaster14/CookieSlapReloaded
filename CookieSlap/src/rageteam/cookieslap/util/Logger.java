@@ -14,7 +14,5 @@ public class Logger {
 	
 	public void logError(Exception ex) {
 		log(true, "Error");
-		
-	
 	}
 }
