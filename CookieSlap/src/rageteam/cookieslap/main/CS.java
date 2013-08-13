@@ -10,6 +10,7 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
+import rageteam.cookieslap.commands.ToggleCommand;
 import rageteam.cookieslap.util.Logger;
 
 public class CS extends JavaPlugin{
@@ -18,22 +19,39 @@ public class CS extends JavaPlugin{
 	public Logger logger;
 	
 	//Scoreboard
-	ScoreboardManager manager = Bukkit.getScoreboardManager();;
-	Scoreboard board = manager.getNewScoreboard();
-	Objective obj = board.registerNewObjective("CookieSlap", "dummy");
+	public ScoreboardManager manager;
+	public Scoreboard board;
+	public Objective obj;
+	
 	//Integers
 	public int timeLeft = 240;
 	public int players = Bukkit.getServer().getOnlinePlayers().length;
 	public int highScore = 0;
 	public int arena = 0;
 	
+	//Commands
+	public ToggleCommand toggleCmd;
+	
 	public void loadDepdencies(){
 		this.logger = new Logger(this);
+		
+		this.toggleCmd = new ToggleCommand(this);	
+	}
+	
+	public void loadCommands(){
+		getCommand("toggleboard").setExecutor(toggleCmd);
 	}
 	
 	@Override
 	public void onEnable(){
+		//Loads The Classes
 		loadDepdencies();
+		loadCommands();
+		
+		//Setting Up The Scoreboard
+		manager = Bukkit.getScoreboardManager();
+		board = manager.getNewScoreboard();
+		obj = board.registerNewObjective("CookieSlap", "dummy");
 		
 		//Scoreboard slot and Scoreboard name
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);

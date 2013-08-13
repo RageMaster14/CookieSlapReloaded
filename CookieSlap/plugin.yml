@@ -5,3 +5,7 @@ version: 0.0.1a
 main: rageteam.cookieslap.main.CS
 softdepend: [WorldEdit]
 commands:
+   toggleboard:
+      description: This Will Toggle The Scoreboard ON/OFF
+      alias: [tb]
+      permission: cookieslap.toggleboard
