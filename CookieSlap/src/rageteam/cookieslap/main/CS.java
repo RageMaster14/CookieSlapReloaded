@@ -1,8 +1,12 @@
 package rageteam.cookieslap.main;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -12,6 +16,8 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 import rageteam.cookieslap.commands.ToggleCommand;
 import rageteam.cookieslap.util.Logger;
+
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 public class CS extends JavaPlugin{
 	
@@ -32,10 +38,21 @@ public class CS extends JavaPlugin{
 	//Commands
 	public ToggleCommand toggleCmd;
 	
+	//Config Stuff
+	private static File pluginFolder;
+	private static File configFile;
+	private static File arenaFile;
+	private static File invFile;
+	public static FileConfiguration cookieslapConfig;
+	public static FileConfiguration arenaConfig;
+	public static FileConfiguration invConfig;
+	private WorldEditPlugin WorldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WolrdEdit");
+	
 	public void loadDepdencies(){
 		this.logger = new Logger(this);
 		
-		this.toggleCmd = new ToggleCommand(this);	
+		this.toggleCmd = new ToggleCommand(this);
+		
 	}
 	
 	public void loadCommands(){
@@ -81,12 +98,69 @@ public class CS extends JavaPlugin{
 		Score arenas = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Arena ID:" + ChatColor.RED));
 		arenas.setScore(arena);
 		
-		for(Player player : Bukkit.getOnlinePlayers()){
-			player.setScoreboard(board);
+		pluginFolder = getDataFolder();
+		configFile = new File(pluginFolder, "config.yml");
+		arenaFile = new File(pluginFolder, "arenas.yml");
+		invFile = new File(pluginFolder, "inventories.yml");
+		cookieslapConfig = new YamlConfiguration();
+		arenaConfig = new YamlConfiguration();
+		invConfig = new YamlConfiguration();
+		
+		if(WorldEdit == null){
+			this.getLogger().info("WolrdEdit Not Found!");
+		} else {
+			this.getLogger().info("WorldEdit Found!");
 		}
+		
+		if(!pluginFolder.exists()){
+			try
+			{
+				pluginFolder.mkdir();
+			} catch (Exception ex){
+			}
+		}if(!configFile.exists()){
+			try
+			{
+				configFile.createNewFile();
+			} catch (Exception ex){
+			}
+		}if(!arenaFile.exists()){
+			try
+			{
+				arenaFile.createNewFile();
+			} catch (Exception ex){
+			}
+		}if(!invFile.exists()){
+			try
+			{
+				invFile.createNewFile();
+			} catch (Exception ex){
+			}
+		}
+		try
+		{
+			cookieslapConfig.load(configFile);
+			arenaConfig.load(arenaFile);
+			invConfig.load(invFile);
+		} catch (Exception ex){
+		}
+		
+		saveConfig();
 	}
 	
 	public void onDisable(){
 		
+	}
+	
+	public void saveConfig(){
+		try
+		{
+			cookieslapConfig.save(configFile);
+			arenaConfig.save(arenaFile);
+			invConfig.save(invFile);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
