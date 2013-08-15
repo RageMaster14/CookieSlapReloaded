@@ -1,5 +1,7 @@
 package rageteam.cookieslap.main;
 
+
+
 import java.io.File;
 import java.io.IOException;
 
@@ -7,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -21,19 +24,24 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 public class CS extends JavaPlugin{
 	
+
 	//Util Classes
 	public Logger logger;
 	
 	//Scoreboard
 	public ScoreboardManager manager;
-	public Scoreboard board;
+	public Scoreboard ingame;
 	public Objective obj;
+	public Scoreboard board;
 	
 	//Integers
 	public int timeLeft = 240;
 	public int players = Bukkit.getServer().getOnlinePlayers().length;
 	public int highScore = 0;
 	public int arena = 0;
+
+	public int win = 0;
+	public int lose = 0;
 	
 	//Commands
 	public ToggleCommand toggleCmd;
@@ -43,16 +51,17 @@ public class CS extends JavaPlugin{
 	private static File configFile;
 	private static File arenaFile;
 	private static File invFile;
+	private static File playersFile;
 	public static FileConfiguration cookieslapConfig;
 	public static FileConfiguration arenaConfig;
 	public static FileConfiguration invConfig;
+	public static FileConfiguration playersConfig;
 	private WorldEditPlugin WorldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WolrdEdit");
 	
 	public void loadDepdencies(){
 		this.logger = new Logger(this);
 		
 		this.toggleCmd = new ToggleCommand(this);
-		
 	}
 	
 	public void loadCommands(){
@@ -65,16 +74,16 @@ public class CS extends JavaPlugin{
 		loadDepdencies();
 		loadCommands();
 		
-		//Setting Up The Scoreboard
+		//Setting Up The In-Game Scoreboard
 		manager = Bukkit.getScoreboardManager();
-		board = manager.getNewScoreboard();
-		obj = board.registerNewObjective("CookieSlap", "dummy");
+		ingame = manager.getNewScoreboard();
+		obj = ingame.registerNewObjective("CookieSlap", "dummy");
 		
 		//Scoreboard slot and Scoreboard name
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(ChatColor.GRAY + "/toggleboard" + ChatColor.WHITE + " to hide");
 		
-		//Scores
+		//In-Game Board
 		final Score time = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.LIGHT_PURPLE + "Time Left:" + ChatColor.RED));
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 			public void run(){
@@ -98,13 +107,37 @@ public class CS extends JavaPlugin{
 		Score arenas = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Arena ID:" + ChatColor.RED));
 		arenas.setScore(arena);
 		
+		//Stats Scoreboard
+		manager = Bukkit.getScoreboardManager();
+		board = manager.getNewScoreboard();
+		obj = board.registerNewObjective("Stats", "dummy");
+		
+		//Scoreboard Slot and Scoreboard name
+		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+		obj.setDisplayName(ChatColor.WHITE + "" + ChatColor.BOLD + "Stats");
+		
+		//Scores
+		Score wins = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.BLUE + "Wins:" + ChatColor.WHITE));
+		wins.setScore(win);
+		
+		Score loses = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Loses:" + ChatColor.WHITE));
+		loses.setScore(lose);
+		
+		if(WorldEdit == null){
+			this.getLogger().info("WolrdEdit Not Found!");
+		} else {
+			this.getLogger().info("WorldEdit Found!");
+		}
+		
 		pluginFolder = getDataFolder();
 		configFile = new File(pluginFolder, "config.yml");
 		arenaFile = new File(pluginFolder, "arenas.yml");
 		invFile = new File(pluginFolder, "inventories.yml");
+		playersFile = new File(pluginFolder, "players.yml");
 		cookieslapConfig = new YamlConfiguration();
 		arenaConfig = new YamlConfiguration();
 		invConfig = new YamlConfiguration();
+		playersConfig = new YamlConfiguration();
 		
 		if(WorldEdit == null){
 			this.getLogger().info("WolrdEdit Not Found!");
@@ -136,13 +169,26 @@ public class CS extends JavaPlugin{
 				invFile.createNewFile();
 			} catch (Exception ex){
 			}
+		}if(!playersFile.exists()){
+			try
+			{
+				playersFile.createNewFile();
+			} catch (Exception ex){
+			}
 		}
 		try
 		{
 			cookieslapConfig.load(configFile);
 			arenaConfig.load(arenaFile);
 			invConfig.load(invFile);
+			playersConfig.load(playersFile);
 		} catch (Exception ex){
+		}
+		
+		saveConfig();
+		
+		for(Player player : Bukkit.getOnlinePlayers()){
+			player.setScoreboard(board);
 		}
 		
 		saveConfig();
@@ -158,6 +204,7 @@ public class CS extends JavaPlugin{
 			cookieslapConfig.save(configFile);
 			arenaConfig.save(arenaFile);
 			invConfig.save(invFile);
+			playersConfig.save(playersFile);
 		} catch (IOException e)
 		{
 			e.printStackTrace();
