@@ -10,8 +10,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 public class StatsBoard {
-	CS plugin;
-	public StatsBoard(CS instance) { this.plugin = instance; }
+	CookieSlap plugin;
+	public StatsBoard(CookieSlap instance) { this.plugin = instance; }
 	
 	public ScoreboardManager manager;
 	public Scoreboard board;

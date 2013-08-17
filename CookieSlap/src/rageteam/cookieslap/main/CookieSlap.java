@@ -1,6 +1,5 @@
 package rageteam.cookieslap.main;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +13,7 @@ import rageteam.cookieslap.commands.ToggleCommand;
 import rageteam.cookieslap.listeners.PlayerListener;
 import rageteam.cookieslap.util.Logger;
 
-public class CS extends JavaPlugin{
+public class CookieSlap extends JavaPlugin{
 	
 
 	//Util Classes
@@ -65,38 +64,38 @@ public class CS extends JavaPlugin{
 		loadListeners();
 		
 		//In-Game Scoreboard
-			manager = Bukkit.getScoreboardManager();
-			ingame = manager.getNewScoreboard();
-			obj = ingame.registerNewObjective("CookieSlap", "dummy");
+		manager = Bukkit.getScoreboardManager();
+		ingame = manager.getNewScoreboard();
+		obj = ingame.registerNewObjective("CookieSlap", "dummy");
 					
-			obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-			obj.setDisplayName(ChatColor.GRAY + "/toggleboard" + ChatColor.WHITE + " to hide");
+		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+		obj.setDisplayName(ChatColor.GRAY + "/toggleboard" + ChatColor.WHITE + " to hide");
 						
-			final Score time = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.LIGHT_PURPLE + "Time Left:" + ChatColor.RED));
-			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-				public void run(){
-					if(timeLeft != -1){
-						if(timeLeft != 0){
-							time.setScore(timeLeft);
-							timeLeft--;
-						} else if(timeLeft == 0){
-							time.setScore(0);
-							timeLeft--;
-						}
+		final Score time = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.LIGHT_PURPLE + "Time Left:" + ChatColor.RED));
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+			public void run(){
+				if(timeLeft != -1){
+					if(timeLeft != 0){
+						time.setScore(timeLeft);
+						timeLeft--;
+					} else if(timeLeft == 0){
+						time.setScore(0);
+						timeLeft--;
 					}
 				}
-			}, 0L, 20L);
+			}
+		}, 0L, 20L);
 						
-			Score online = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_AQUA + "Players:" + ChatColor.RED));
-			online.setScore(players);
+		Score online = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_AQUA + "Players:" + ChatColor.RED));
+		online.setScore(players);
 						
-			Score hScore = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.YELLOW + "HighScore:" + ChatColor.RED));
-			hScore.setScore(highScore);
+		Score hScore = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.YELLOW + "HighScore:" + ChatColor.RED));
+		hScore.setScore(highScore);
 						
-			Score arenas = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Arena ID:" + ChatColor.RED));
-			arenas.setScore(arena);
+		Score arenas = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Arena ID:" + ChatColor.RED));
+		arenas.setScore(arena);
 		
-			stats.stats();
+		stats.stats();
 	}
 	
 	public void onDisable(){

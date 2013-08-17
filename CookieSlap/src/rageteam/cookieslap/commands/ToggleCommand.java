@@ -8,11 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 
-import rageteam.cookieslap.main.CS;
+import rageteam.cookieslap.main.CookieSlap;
 
 public class ToggleCommand implements CommandExecutor{
-	CS plugin;
-	public ToggleCommand(CS instance) { this.plugin = instance; }
+	CookieSlap plugin;
+	public ToggleCommand(CookieSlap instance) { this.plugin = instance; }
 	
 	Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 	

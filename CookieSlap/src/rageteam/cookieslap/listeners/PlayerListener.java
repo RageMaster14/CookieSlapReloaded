@@ -4,12 +4,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import rageteam.cookieslap.main.CS;
+import rageteam.cookieslap.main.CookieSlap;
 
 public class PlayerListener implements Listener{
 	
-	CS plugin;
-	public PlayerListener(CS instance) { this.plugin = instance; }
+	CookieSlap plugin;
+	public PlayerListener(CookieSlap instance) { this.plugin = instance; }
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e){

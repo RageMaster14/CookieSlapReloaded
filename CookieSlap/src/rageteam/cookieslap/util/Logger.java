@@ -1,11 +1,11 @@
 package rageteam.cookieslap.util;
 
 
-import rageteam.cookieslap.main.CS;
+import rageteam.cookieslap.main.CookieSlap;
 
 public class Logger {
-	CS plugin;
-	public Logger(CS instance) { this.plugin = instance; }
+	CookieSlap plugin;
+	public Logger(CookieSlap instance) { this.plugin = instance; }
 	
 	public void log(boolean warning, String message) {
 		if(warning) { }
