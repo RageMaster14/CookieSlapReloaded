@@ -2,7 +2,7 @@ name: CookieSlap
 description: A Reloaded version of CookieSlap!
 authors: [Xquiset, Rage_Master14, TheMinecraftDomain]
 version: 0.0.1a
-main: rageteam.cookieslap.main.CS
+main: rageteam.cookieslap.main.CookieSlap
 softdepend: [WorldEdit]
 commands:
    toggleboard:

@@ -9,13 +9,17 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
+import rageteam.cookieslap.arena.Game;
+import rageteam.cookieslap.arena.GameTime;
 import rageteam.cookieslap.commands.ToggleCommand;
+import rageteam.cookieslap.economy.Points;
+import rageteam.cookieslap.economy.PopupMenu;
+import rageteam.cookieslap.economy.PopupMenuAPI;
 import rageteam.cookieslap.listeners.PlayerListener;
 import rageteam.cookieslap.util.Logger;
 
 public class CookieSlap extends JavaPlugin{
 	
-
 	//Util Classes
 	public Logger logger;
 	
@@ -38,6 +42,15 @@ public class CookieSlap extends JavaPlugin{
 	
 	//Commands
 	public ToggleCommand toggleCmd;
+	
+	//Arena
+	public Game game;
+	public GameTime gameTime;
+	
+	//Economy
+	public Points points;
+	public PopupMenu popupMenu;
+	public PopupMenuAPI popupApi;
 
 	public void loadDepdencies(){
 		this.logger = new Logger(this);
@@ -47,6 +60,13 @@ public class CookieSlap extends JavaPlugin{
 		this.stats = new StatsBoard(this);
 		
 		this.pListener = new PlayerListener(this);
+		
+		this.game = new Game(this);
+		this.gameTime = new GameTime(this);
+		
+		this.points = new Points(this);
+		this.popupMenu = new PopupMenu(this);
+		this.popupApi = new PopupMenuAPI(this);
 	}
 	
 	public void loadCommands(){
@@ -55,6 +75,7 @@ public class CookieSlap extends JavaPlugin{
 	
 	public void loadListeners(){
 		getServer().getPluginManager().registerEvents(pListener, this);
+		getServer().getPluginManager().registerEvents(popupApi, this);
 	}
 	
 	@Override
