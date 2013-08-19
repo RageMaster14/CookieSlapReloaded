@@ -52,6 +52,8 @@ public class CookieSlap extends JavaPlugin{
 	public PopupMenu popupMenu;
 	public PopupMenuAPI popupApi;
 
+	public Object bridge;
+
 	public void loadDepdencies(){
 		this.logger = new Logger(this);
 		
