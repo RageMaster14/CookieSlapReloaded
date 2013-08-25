@@ -1,126 +1,125 @@
 package rageteam.cookieslap.main;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
-import rageteam.cookieslap.arena.Game;
-import rageteam.cookieslap.arena.GameTime;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import rageteam.cookieslap.commands.CookieSlapCommand;
 import rageteam.cookieslap.commands.ToggleCommand;
-import rageteam.cookieslap.economy.Points;
-import rageteam.cookieslap.economy.PopupMenu;
-import rageteam.cookieslap.economy.PopupMenuAPI;
-import rageteam.cookieslap.listeners.PlayerListener;
-import rageteam.cookieslap.util.Logger;
+import rageteam.cookieslap.events.CookieSlapEvents;
+import rageteam.cookieslap.events.MapListener;
+import rageteam.cookieslap.events.PlayerListener;
+import rageteam.cookieslap.events.SignListener;
+import rageteam.cookieslap.games.Game;
+import rageteam.cookieslap.games.GameManager;
+import rageteam.cookieslap.games.GameUtilities;
+import rageteam.cookieslap.games.Status;
+import rageteam.cookieslap.maps.MapUtilities;
+import rageteam.cookieslap.misc.Chat;
+import rageteam.cookieslap.misc.Config;
+import rageteam.cookieslap.misc.UpdateUtils;
+import rageteam.cookieslap.misc.Updater;
+import rageteam.cookieslap.misc.Updater.UpdateResult;
+import rageteam.cookieslap.misc.Updater.UpdateType;
+import rageteam.cookieslap.misc.Utilities;
+import rageteam.cookieslap.players.PlayerManager;
+import rageteam.cookieslap.players.UtilPlayer;
+
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 public class CookieSlap extends JavaPlugin{
 	
-	//Util Classes
-	public Logger logger;
+	public static CookieSlap getCookieSlap(){
+		return (CookieSlap)Bukkit.getPluginManager().getPlugin("CookieSlap");
+	}
 	
-	//Scoreboard
-	public ScoreboardManager manager;
-	public Objective obj;
-	public Scoreboard ingame;
-	public StatsBoard stats;
+	public Chat chat;
+	public MapUtilities maps;
+	public GameUtilities games;
+	public GameManager game;
+	public PlayerManager pm;
+	public Utilities utils;
+	public Config config;
 	
-	//Listeners
-	public PlayerListener pListener;
-	
-	//Integers
-	public int timeLeft = 240;
-	public int players = 0;
-	public int highScore = 0;
-	public int arena = 0;
-	
-	//Config
-	
-	//Commands
 	public ToggleCommand toggleCmd;
+	public Updater u;
+	public boolean updateOut = false;
+	public String newVer = "";
+	public File updateFile = this.getFile();
 	
-	//Arena
-	public Game game;
-	public GameTime gameTime;
+	public List<String> special = Arrays.asList(new String[] { "Xquiset", "Rage_Master14"});
+	public boolean eco = false;
+	public boolean disabling = false;
 	
-	//Economy
-	public Points points;
-	public PopupMenu popupMenu;
-	public PopupMenuAPI popupApi;
-
-	public Object bridge;
-
-	public void loadDepdencies(){
-		this.logger = new Logger(this);
+	
+	public void onEnable(){
+		this.chat = new Chat();
+		if(getServer().getPluginManager().getPlugin("WorldEdit") == null){
+			chat.log("WorldEdit not found! Please download it from http://dev.bukkit.org/bukkit-plugins/worldedit");
+			Bukkit.getPluginManager().disablePlugin(this);
+			return;
+		}
 		
+		this.maps = new MapUtilities();
+		this.games = new GameUtilities();
+		this.game = new GameManager(CookieSlap.getCookieSlap());
+		this.pm = new PlayerManager();
+		this.utils = new Utilities();
+		this.config = new Config(this);
 		this.toggleCmd = new ToggleCommand(this);
 		
-		this.stats = new StatsBoard(this);
+		maps.c.setup();
+		config.setup();
 		
-		this.pListener = new PlayerListener(this);
+		getConfig().options().copyDefaults(true);
+		saveConfig();
 		
-		this.game = new Game(this);
-		this.gameTime = new GameTime(this);
-		
-		this.points = new Points(this);
-		this.popupMenu = new PopupMenu(this);
-		this.popupApi = new PopupMenuAPI(this);
-	}
-	
-	public void loadCommands(){
-		getCommand("toggleboard").setExecutor(toggleCmd);
-	}
-	
-	public void loadListeners(){
-		getServer().getPluginManager().registerEvents(pListener, this);
-		getServer().getPluginManager().registerEvents(popupApi, this);
-	}
-	
-	@Override
-	public void onEnable(){
-		loadDepdencies();
-		loadCommands();
-		loadListeners();
-		
-		//In-Game Scoreboard
-		manager = Bukkit.getScoreboardManager();
-		ingame = manager.getNewScoreboard();
-		obj = ingame.registerNewObjective("CookieSlap", "dummy");
-					
-		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		obj.setDisplayName(ChatColor.GRAY + "/toggleboard" + ChatColor.WHITE + " to hide");
-						
-		final Score time = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.LIGHT_PURPLE + "Time Left:" + ChatColor.RED));
-		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-			public void run(){
-				if(timeLeft != -1){
-					if(timeLeft != 0){
-						time.setScore(timeLeft);
-						timeLeft--;
-					} else if(timeLeft == 0){
-						time.setScore(0);
-						timeLeft--;
-					}
-				}
+		if(getConfig().getBoolean("auto-update")) {
+			u = new Updater(this, "cookieslap-game", getFile(), UpdateType.NO_DOWNLOAD, false);
+			updateOut = u.getResult() == UpdateResult.UPDATE_AVAILABLE;
+			if(updateOut){
+				newVer = u.getLatestVersionString();
 			}
-		}, 0L, 20L);
-						
-		Score online = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_AQUA + "Players:" + ChatColor.RED));
-		online.setScore(players);
-						
-		Score hScore = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.YELLOW + "HighScore:" + ChatColor.RED));
-		hScore.setScore(highScore);
-						
-		Score arenas = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Arena ID:" + ChatColor.RED));
-		arenas.setScore(arena);
+			getServer().getPluginManager().registerEvents(new UpdateUtils(), this);
+		}
 		
-		stats.stats();
+		getServer().getPluginManager().registerEvents(new MapListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+		getServer().getPluginManager().registerEvents(new CookieSlapEvents(), this);
+		getServer().getPluginManager().registerEvents(new SignListener(), this);
+		
+		getCommand("cs").setExecutor(new CookieSlapCommand());
+		getCommand("toggleboard").setExecutor(toggleCmd);
+		
+		for(Player players : Bukkit.getOnlinePlayers()) {
+			UtilPlayer u = new UtilPlayer(players);
+			pm.PLAYERS.put(players.getName(), u);
+		}
+		
+		super.onEnable();
 	}
+	
 	
 	public void onDisable(){
+		disabling = true;
+		for(Game game : this.games.GAMES.values()){
+			if(game.getStatus() == Status.INGAME){
+				this.game.stopGame(game, 1);
+			}
+		}
+		super.onDisable();
+	}
+	
+	public WorldEditPlugin getWorldEdit() {
+		Plugin worldEdit = getServer().getPluginManager().getPlugin("WorldEdit");
+		if ((worldEdit instanceof WorldEditPlugin)) {
+			return (WorldEditPlugin) worldEdit;
+		}
+		return null;
 	}
 }

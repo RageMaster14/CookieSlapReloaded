@@ -9,8 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 
 import rageteam.cookieslap.main.CookieSlap;
+import rageteam.cookieslap.main.CookieSlapBoard;
 
 public class ToggleCommand implements CommandExecutor{
+	CookieSlapBoard board;
 	CookieSlap plugin;
 	public ToggleCommand(CookieSlap instance) { this.plugin = instance; }
 	
@@ -19,11 +21,11 @@ public class ToggleCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String cL, String[] args) {
 		Player player = (Player) sender;
-		if(player.getScoreboard() == plugin.ingame){
+		if(player.getScoreboard() == board.board){
 			player.setScoreboard(scoreboard);
 			player.sendMessage(ChatColor.RED + "Scoreboard Disabled!");
 		}else if(player.getScoreboard() == scoreboard){
-			player.setScoreboard(plugin.ingame);
+			player.setScoreboard(board.board);
 			player.sendMessage(ChatColor.GREEN + "Scoreboard Enabled!");
 		}
 		return false;
