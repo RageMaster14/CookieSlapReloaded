@@ -1,0 +1,7 @@
+auto-start:
+  players: 2
+auto-update: true
+economy:
+  use: false
+  win: 50
+  kill: 5

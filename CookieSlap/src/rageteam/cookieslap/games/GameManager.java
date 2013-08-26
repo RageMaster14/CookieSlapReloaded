@@ -38,6 +38,8 @@ public class GameManager {
 		
 		int c = 1;
 		
+		game.loadFloors();
+		
 		cookieslap.chat.bc("You are playing on &2 " + game.getMap().getName() + " &6.", game);
 		
 		Map map = game.getMap();
@@ -83,6 +85,7 @@ public class GameManager {
 		
 		game.resetArena();
 		game.data.clear();
+		game.floor.clear();
 		
 		game.setStarting(false);
 		

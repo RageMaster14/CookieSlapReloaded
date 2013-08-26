@@ -2,10 +2,12 @@ package rageteam.cookieslap.games;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -18,6 +20,9 @@ import rageteam.cookieslap.runnables.GameTime;
 import rageteam.cookieslap.runnables.LobbyCountdown;
 import rageteam.cookieslap.store.InvStore;
 
+import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
+import com.sk89q.worldedit.bukkit.selections.Selection;
+
 public class Game {
 	
 	CookieSlap cookieslap;
@@ -25,6 +30,7 @@ public class Game {
 	Map map;
 	Status status;
 	HashMap<String,CookieSlapPlayer> players;
+	HashSet<Location> floor;
 	ArrayList<Rollback> data;
 	private int lobbycount;
 	int time;
@@ -42,6 +48,7 @@ public class Game {
 		this.name = map.getName();
 		this.status = Status.LOBBY;
 		this.players = new HashMap<String, CookieSlapPlayer>();
+		this.floor = new HashSet<Location>();
 		this.data = new ArrayList<Rollback>();
 		time = 601;
 		setLobbyCount(31);
@@ -66,6 +73,10 @@ public class Game {
 	
 	public int getCounterID() {
 		return this.counter;
+	}
+	
+	public HashSet<Location> getFloor(){
+		return this.floor;
 	}
 	
 	public ArrayList<Rollback> getDatas() {
@@ -242,6 +253,43 @@ public class Game {
 	
 	public int getLowestPossible(){
 		return this.small;
+	}
+	
+	public boolean loadFloors(){
+		this.floor.clear();
+		
+		if(map.getFloors() > 0){
+			for(int i = 1; i <= map.getFloors(); i++){
+				Selection sel = new CuboidSelection(map.getSpawn(1).getWorld(), map.getFloor(i, "1"), map.getFloor(i, "2"));
+				Location min = sel.getMinimumPoint();
+				Location max = sel.getMaximumPoint();
+				
+				int minX = min.getBlockX();
+				int minY = min.getBlockY();
+				this.y1 = minY;
+				int minZ = min.getBlockZ();
+				int maxX = max.getBlockX();
+				int maxY = max.getBlockY();
+				this.y2 = maxY;
+				int maxZ = max.getBlockZ();
+				
+				this.small = Math.min(y1, y2);
+				
+				for(int x = minX; x <= maxX; x++){
+					for(int y = minY; y <= maxY; y++){
+						for(int z = minZ; z <= maxZ; z++){
+							Location l = new Location(min.getWorld(), x, y, z);
+							floor.add(l);
+							Block block = l.getWorld().getBlockAt(x, y, z);
+							data.add(new Rollback(l.getWorld().getName(), block.getTypeId(), block.getData(), x, y, z));
+						}
+					}
+				}
+			} 
+		} else {
+			return false;
+		}
+		return true;
 	}
 	
 	public void resetArena(){

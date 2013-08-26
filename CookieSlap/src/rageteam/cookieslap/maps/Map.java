@@ -17,6 +17,7 @@ public class Map {
 	File file;
 	private FileConfiguration config;
 	int spawncount;
+	int floorcount;
 	boolean usable;
 	
 	public Map(CookieSlap plugin, String name) {
@@ -25,6 +26,7 @@ public class Map {
 		this.name = name;
 		
 		this.spawncount = 0;
+		this.floorcount = 0;
 	}
 	
 	public void load()  {
@@ -44,6 +46,7 @@ public class Map {
 		
 		save();
 		loadSpawns();
+		loadFloors();
 		
 		if(this.spawncount > 0) {
 			usable = true;
@@ -52,10 +55,17 @@ public class Map {
 			usable = false;
 		}
 		
+		if(this.floorcount > 0){
+			usable = true;
+		} else {
+			cookieslap.chat.log("No floors are setup");
+			usable = false;
+		}
+		
 		if (usable) {
 			cookieslap.chat.log("Map is usable");
 		} else {
-			cookieslap.chat.log("---<>---[PLEASE SETUP THE MAP!!]---<>---");
+			cookieslap.chat.log("---<>---[PLEASE SETUP THE MAP!]---<>---");
 		}
 		
 		cookieslap.chat.log("Load Complete");
@@ -128,8 +138,14 @@ public class Map {
 		}
 	}
 	
+	public void loadFloors(){
+		for(int a = 1; a <= getFloors(); a++){
+			this.floorcount = a;
+		}
+	}
+	
 	public void addSpawn(Location l) {
-		this.spawncount = 1;
+		this.spawncount += 1;
 		
 		savenumbers();
 		
@@ -150,5 +166,37 @@ public class Map {
 	
 	public FileConfiguration getConfig(){
 		return config;
+	}
+
+	public void addFloor(Location p1, Location p2) {
+		this.floorcount += 1;
+		
+		savenumbers();
+		
+		config.set("Floors." + floorcount + ".p1.x", p1.getBlockX());
+		config.set("Floors." + floorcount + ".p1.y", p1.getBlockY());
+		config.set("Floors." + floorcount + ".p1.z", p1.getBlockZ());
+		config.set("Floors." + floorcount + ".p1.world", p1.getWorld().getName());
+		
+		config.set("Floors." + floorcount + ".p2.x", p2.getBlockX());
+		config.set("Floors." + floorcount + ".p2.y", p2.getBlockY());
+		config.set("Floors." + floorcount + ".p2.z", p2.getBlockZ());
+		config.set("Floors." + floorcount + ".p2.world", p2.getWorld().getName());
+		
+		save();
+	}
+
+	public Location getFloor(int id, String pos) {
+		int x,y,z;
+		String world;
+		x = config.getInt("Floors." + id + ".p" + pos + ".x");
+		y = config.getInt("Floors." + id + ".p" + pos + ".y");
+		z = config.getInt("Floors." + id + ".p" + pos + ".z");
+		world = config.getString("Floors." + id + ".p" + pos + ".world");
+		return new Location(Bukkit.getWorld(world), x, y, z);
+	}
+	
+	public int getFloors(){
+		return getConfig().getInt("Floors.count");
 	}
 }
