@@ -48,14 +48,14 @@ public class Map {
 		loadSpawns();
 		loadFloors();
 		
-		if(this.spawncount > 0) {
+		if(this.spawncount > -1) {
 			usable = true;
 		} else {
 			cookieslap.chat.log("Spawn count is 0");
 			usable = false;
 		}
 		
-		if(this.floorcount > 0){
+		if(this.floorcount > -1){
 			usable = true;
 		} else {
 			cookieslap.chat.log("No floors are setup");

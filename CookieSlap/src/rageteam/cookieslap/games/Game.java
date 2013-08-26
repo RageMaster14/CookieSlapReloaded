@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import rageteam.cookieslap.lobby.LobbySign;
 import rageteam.cookieslap.main.CookieSlap;
+import rageteam.cookieslap.main.ScoreboardUtils;
 import rageteam.cookieslap.maps.Map;
 import rageteam.cookieslap.players.CookieSlapPlayer;
 import rageteam.cookieslap.players.UtilPlayer;
@@ -151,6 +152,8 @@ public class Game {
 						
 						cookieslap.chat.sendMessage(player, "You have joined the lobby for map §c" + map.getName() + "§6.");
 						
+						ScoreboardUtils.get().setScoreAll(this, "Queue", players.size());
+						
 						if (this.players.size() >= cookieslap.getConfig().getInt("auto-start.players") && (!this.isStarting())){
 							startCountdown();
 							this.setStarting(true);
@@ -181,9 +184,11 @@ public class Game {
 							player.teleport(cookieslap.config.getLobby());
 							
 
-							cookieslap.chat.sendMessage(player, "You have been teleported to the splegg lobby. You will be teleported to the map on the game start.");
+							cookieslap.chat.sendMessage(player, "You have been teleported to the cookieslap lobby. You will be teleported to the map on the game start.");
 
 							cookieslap.chat.sendMessage(player, "Players in your game: " + getPlayersIn());
+							
+							ScoreboardUtils.get().setScoreAll(this, "Queue", players.size());
 
 							cookieslap.chat.sendMessage(player, "You have joined the lobby for map §c" + map.getName() + "§6.");
 							cookieslap.chat.bcNotForPlayer(player, (cookieslap.special.contains(player.getName()) ? "§4" : "§a") + player.getName() + "&6 has joined the game. &e" + players.size() + "/" + max, this);
