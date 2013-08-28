@@ -1,5 +1,5 @@
 auto-start:
-  players: 2
+  players: 4
 auto-update: true
 economy:
   use: false
