@@ -24,9 +24,6 @@ public class Map {
 		this.cookieslap = plugin;
 		
 		this.name = name;
-		
-		this.spawncount = 0;
-		this.floorcount = 0;
 	}
 	
 	public void load()  {
@@ -65,7 +62,7 @@ public class Map {
 		if (usable) {
 			cookieslap.chat.log("Map is usable");
 		} else {
-			cookieslap.chat.log("---<>---[PLEASE SETUP THE MAP!]---<>---");
+			cookieslap.chat.log("---<>--- PLEASE SETUP THE MAP! ---<>---");
 		}
 		
 		cookieslap.chat.log("Load Complete");
@@ -81,6 +78,7 @@ public class Map {
 	
 	public void savenumbers() {
 		getConfig().set("Spawn.count", spawncount);
+		getConfig().set("Floor.count", floorcount);
 	}
 	
 	public void save(){
@@ -89,6 +87,10 @@ public class Map {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean lobbySet(){
+		return getConfig().isSet("Spawns.lobby.world");
 	}
 	
 	public void setSpawn(int id, Location l) {
@@ -153,11 +155,15 @@ public class Map {
 	}
 	
 	public int getCount(){
-		return getConfig().getInt("Spawns.count");
+		return getConfig().getInt("Spawn.count");
 	}
 	
 	public int getSpawnCount(){
 		return this.spawncount;
+	}
+	
+	public int getFloorCount(){
+		return this.floorcount;
 	}
 	
 	public void setConfig(FileConfiguration  config){
@@ -197,6 +203,40 @@ public class Map {
 	}
 	
 	public int getFloors(){
-		return getConfig().getInt("Floors.count");
+		return getConfig().getInt("Floor.count");
+	}
+	
+	public void setLobby(Location l){
+		int x = l.getBlockX();
+		int y = l.getBlockY();
+		int z = l.getBlockZ();
+		
+		float pitch = l.getPitch();
+		float yaw = l.getYaw();
+		
+		String worldname = l.getWorld().getName();
+		
+		getConfig().set("Spawns.lobby.world", worldname);
+		getConfig().set("Spawns.lobby.x", x);
+		getConfig().set("Spawns.lobby.y", y);
+		getConfig().set("Spawns.lobby.z", z);
+		getConfig().set("Spawns.lobby.pitch", pitch);
+		getConfig().set("Spawns.lobby.yaw", yaw);
+	}
+	
+	public Location getLobby(){
+		int x,y,z;
+		float yaw,pitch;
+		World world;
+		
+		x = getConfig().getInt("Spawns.lobby.x");
+		y = getConfig().getInt("Spawns.lobby.y");
+		z = getConfig().getInt("Spawns.lobby.z");
+		
+		yaw = getConfig().getInt("Spawns.lobby.yaw");
+		pitch = getConfig().getInt("Spawns.lobby.pitch");
+		
+		world = Bukkit.getWorld(getConfig().getString("Spawns.lobby.world"));
+		return new Location(world, x + 0.5D, y + 0.5D, z + 0.5D, yaw, pitch);
 	}
 }

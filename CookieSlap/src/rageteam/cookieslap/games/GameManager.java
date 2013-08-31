@@ -126,7 +126,7 @@ public class GameManager {
 		ItemStack cookie = new ItemStack(Material.COOKIE);
 		cookie.addUnsafeEnchantment(Enchantment.KNOCKBACK, 25);
 		ItemMeta cookieMeta = cookie.getItemMeta();
-		cookieMeta.setDisplayName(u.getPlayer().getDisplayName() + "'s Magical Cookie");
+		cookieMeta.setDisplayName("The Magical Cookie");
 		cookieMeta.setLore(Arrays.asList(new String[] { "§3Left-Click to knock players off the edge" }));
 		cookie.setItemMeta(cookieMeta);
 		return cookie;

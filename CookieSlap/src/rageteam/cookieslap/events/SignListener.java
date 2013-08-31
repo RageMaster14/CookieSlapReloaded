@@ -24,7 +24,7 @@ public class SignListener implements Listener{
 		Player player = e.getPlayer();
 		Permissions perms = new Permissions(player);
 		
-		if(e.getLine(0).equalsIgnoreCase("[CS]") && perms.canModifyMaps()){
+		if(e.getLine(0).equalsIgnoreCase("[cs]") && perms.canModifyMaps()){
 			String map = e.getLine(1);
 			if(CookieSlap.getCookieSlap().maps.mapExists(map)){
 				LobbySign ls = new LobbySign(CookieSlap.getCookieSlap().maps.getMap(map), CookieSlap.getCookieSlap());
@@ -65,9 +65,9 @@ public class SignListener implements Listener{
 			if(LobbySignUtils.get().isLobbySign(e.getBlock().getLocation(), map)){
 				Permissions perms = new Permissions(player);
 				if(perms.canModifyMaps()){
-					LobbySign signs = new LobbySign(CookieSlap.getCookieSlap().maps.getMap(map), CookieSlap.getCookieSlap());
-					signs.delete(e.getBlock().getLocation());
-					CookieSlap.getCookieSlap().chat.sendMessage(player, "You have successfully remove a cookieslap sign for the map &c" + map + "&6.");
+					LobbySign sign = new LobbySign(CookieSlap.getCookieSlap().maps.getMap(map), CookieSlap.getCookieSlap());
+					sign.delete(e.getBlock().getLocation());
+					CookieSlap.getCookieSlap().chat.sendMessage(player, "You have successfully removed a cookieslap sign for the map &c" + map + "&6.");
 				} else {
 					e.setCancelled(true);
 					CookieSlap.getCookieSlap().chat.sendMessage(player, "You cannot remove that sign");

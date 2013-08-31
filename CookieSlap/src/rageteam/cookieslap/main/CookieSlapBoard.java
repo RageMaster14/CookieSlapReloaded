@@ -72,8 +72,8 @@ public class CookieSlapBoard extends JavaPlugin{
 		getSidebar().setDisplayName(string);
 	}
 
-	public void setScore(String name, int score) {
-		getSidebar().getScore(Bukkit.getOfflinePlayer(name)).setScore(score);
+	public void setScore(String string, int i) {
+		setup();
 	}
 
 	public void hideScore(String name) {

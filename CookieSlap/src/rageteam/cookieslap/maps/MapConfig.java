@@ -65,11 +65,10 @@ public class MapConfig {
 		saveMaps();
 	}
 	
-	public void delSign(String name) {
-		List<String> maps = this.maps.getStringList("maps");
-		maps.add(name);
-		this.maps.set("maps", maps);
-		
+	public void delSign(String map, String loc) {
+		List<String> signs = this.maps.getStringList("Signs." + map + ".lobby");
+		signs.remove(loc);
+		this.maps.set("Signs." + map + ".lobby", signs);
 		saveMaps();
 	}
 	

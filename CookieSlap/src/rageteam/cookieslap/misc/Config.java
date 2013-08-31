@@ -23,7 +23,7 @@ public class Config {
 	private File f;
 	
 	public void setup() {
-		f = new File(cookieslap.getDataFolder(), "spawn.yml");
+		f = new File(cookieslap.getDataFolder(), "spawns.yml");
 		
 		try {
 			if(!f.exists()){
@@ -62,10 +62,10 @@ public class Config {
 			
 			spawns.set("Spawns.lobby.world", worldName);
 			spawns.set("Spawns.lobby.x", x);
-			spawns.set("Spawn.lobby.y", y);
+			spawns.set("Spawns.lobby.y", y);
 			spawns.set("Spawns.lobby.z", z);
 			spawns.set("Spawns.lobby.yaw", yaw);
-			spawns.set("Spaws.lobby.pitch", pitch);
+			spawns.set("Spawns.lobby.pitch", pitch);
 			
 			saveSpawns();
 		}

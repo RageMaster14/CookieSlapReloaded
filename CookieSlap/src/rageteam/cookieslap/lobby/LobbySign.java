@@ -39,7 +39,7 @@ public class LobbySign {
 	
 	public void delete(Location location) {
 		String loc = LobbySignUtils.get().locationToString(location);
-		cookieslap.maps.c.addSign(map.getName(), loc);
+		cookieslap.maps.c.delSign(map.getName(), loc);
 		cookieslap.maps.c.saveMaps();
 		this.map = null;
 	}
@@ -55,7 +55,7 @@ public class LobbySign {
 				String[] array = new String[4];
 				array[0] = ChatColor.BOLD + "======";
 				array[1] = "CookieSlap by";
-				array[2] = "Xquiset, RageMaster";
+				array[2] = "Xquiset";
 				array[3] = ChatColor.BOLD + "======";
 				setSign(array, s);
 				
@@ -68,6 +68,7 @@ public class LobbySign {
 					sign[1] = ChatColor.DARK_RED + "Please remove";
 					sign[2] = ChatColor.DARK_RED + "this sign";
 					sign[3] = "";
+					
 				} else {
 					
 					sign[0] = ChatColor.GOLD + "[CookieSlap]";
@@ -75,8 +76,6 @@ public class LobbySign {
 					sign[2] = getFancyStatus(game);
 					sign[3] = ChatColor.BOLD + getPlayers(game);
 				}
-				
-				Bukkit.getScheduler().scheduleSyncDelayedTask(cookieslap, new SignDelay(sign, s), 40L);
 			} else {
 				Game game = cookieslap.games.getGame(map.getName());
 				String[] sign = new String[4];
