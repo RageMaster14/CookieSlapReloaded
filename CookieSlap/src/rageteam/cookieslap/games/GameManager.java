@@ -63,7 +63,7 @@ public class GameManager {
 			cp.getPlayer().setGameMode(GameMode.ADVENTURE);
 			
 			//give items
-			for(int i = 0; i < 2; i++){
+			for(int i = 0; i < 1; i++){
 				cp.getPlayer().getInventory().setItem(i, getCookie());
 			}
 		}
