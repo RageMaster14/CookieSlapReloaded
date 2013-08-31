@@ -3,4 +3,4 @@ auto-start:
   time: 30
 auto-update: true
 joinMessages: true
-graceperiod: 0
+graceperiod: 5

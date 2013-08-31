@@ -20,11 +20,11 @@ public class GameTime implements Runnable{
 			ScoreboardUtils.get().setDisplayAll(game, "CookieSlap | " + cookieslap.game.getDigitTIme(game.getLobbyCount()));
 			
 			if(game.getCount() % 300 == 0) {
-				cookieslap.game.inGameTime(game.getCount(), game.getPlayers());
+				cookieslap.game.ingameTimer(game.getCount(), game.getPlayers());
 			}
 			
 			if(game.getCount() % 30 == 0 && game.getCount() < 60) {
-				cookieslap.game.inGameTime(game.getCount(), game.getPlayers());
+				cookieslap.game.ingameTimer(game.getCount(), game.getPlayers());
 			}
 			
 			if(game.getCount() <= 5 && game.getCount() >= 1){

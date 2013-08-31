@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import rageteam.cookieslap.lobby.LobbySign;
 import rageteam.cookieslap.main.CookieSlap;
+import rageteam.cookieslap.main.CookieSlapBoard;
 import rageteam.cookieslap.main.ScoreboardUtils;
 import rageteam.cookieslap.maps.Map;
 import rageteam.cookieslap.players.CookieSlapPlayer;
@@ -30,9 +31,10 @@ public class Game {
 	String name;
 	Map map;
 	Status status;
-	HashMap<String,CookieSlapPlayer> players;
+	public HashMap<String,CookieSlapPlayer> players;
 	HashSet<Location> floor;
 	ArrayList<Rollback> data;
+	CookieSlapBoard board;
 	private int lobbycount;
 	int time;
 	int y1;
@@ -51,7 +53,7 @@ public class Game {
 		this.players = new HashMap<String, CookieSlapPlayer>();
 		this.floor = new HashSet<Location>();
 		this.data = new ArrayList<Rollback>();
-		time = 601;
+		time = 240;
 		lobbycount = 31;
 		y1 = 0;
 		y2 = 0;
@@ -127,6 +129,7 @@ public class Game {
 	
 	public void joinGame(UtilPlayer u){
 		Player player = u.getPlayer();
+		cookieslap.utils.clearInventory(player);
 		if(u.getGame() != null){
 			cookieslap.chat.sendMessage(player, "You are already in a game");
 		} else {
@@ -140,9 +143,7 @@ public class Game {
 						CookieSlapPlayer cp = new CookieSlapPlayer(player, u);
 						
 						u.setAlive(true);
-						u.getStore().save();
-						cookieslap.utils.clearInventory(player);
-						
+
 						player.setHealth(20.0);
 						player.setFoodLevel(20);
 						player.setLevel(0);
@@ -165,8 +166,6 @@ public class Game {
 						cookieslap.chat.sendMessage(player, "Players in your game:" + getPlayersIn());
 						
 						cookieslap.chat.sendMessage(player, "You have joined the lobby for map §c" + map.getName() + "§6.");
-						
-						ScoreboardUtils.get().setScoreAll(this,"Queue", players.size());
 						
 						if (this.players.size() >= cookieslap.getConfig().getInt("auto-start.players") && (!this.isStarting())){
 							startCountdown();
@@ -206,8 +205,12 @@ public class Game {
 
 							cookieslap.chat.sendMessage(player, "Players in your game: " + getPlayersIn());
 							
+							if(players.size() <= 1){
 							ScoreboardUtils.get().setScoreAll(this, "Queue", players.size());
-
+							} else {
+								ScoreboardUtils.get().hideScoreAll(this, "Queue");
+							}
+							
 							cookieslap.chat.sendMessage(player, "You have joined the lobby for map §c" + map.getName() + "§6.");
 							
 							if(cookieslap.getConfig().getBoolean("joinMessages")){

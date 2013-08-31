@@ -4,28 +4,34 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import rageteam.cookieslap.main.CookieSlap;
+import rageteam.cookieslap.main.CookieSlapBoard;
 import rageteam.cookieslap.main.ScoreboardUtils;
 import rageteam.cookieslap.maps.Map;
 import rageteam.cookieslap.players.CookieSlapPlayer;
 import rageteam.cookieslap.players.UtilPlayer;
 
-public class GameManager {
+public class GameManager extends JavaPlugin{
 	
 	CookieSlap cookieslap;
 	UtilPlayer u;
+	public CookieSlapBoard ingame;
+	public int timeleft = 240;
+	Game game;
 	
 	public GameManager(CookieSlap cookieslap){
 		this.cookieslap = cookieslap;
 	}
 	
-	public void startGame(Game game){
+	public void startGame(final Game game){
 		cookieslap.chat.log("New game commencing..");
 		
 		game.startGameTimer();
@@ -46,6 +52,9 @@ public class GameManager {
 		
 		ScoreboardUtils.get().hideScoreAll(game, "Starting in");
 		ScoreboardUtils.get().hideScoreAll(game, "Queue");
+		ScoreboardUtils.get().setScoreAll(game, ChatColor.DARK_AQUA + "Players:", game.getPlayers().size());
+		ScoreboardUtils.get().setScoreAll(game, ChatColor.YELLOW + "HighScore:", 1);
+		ScoreboardUtils.get().setScoreAll(game, ChatColor.GREEN + "Arena #:", game.getMap().getCount());
 		
 		for(CookieSlapPlayer cp : game.players.values()){
 			cp.getPlayer().setLevel(0);
@@ -110,14 +119,14 @@ public class GameManager {
 	
 	public String getDigitTIme(int count){
 		int minutes = count / 60;
-		int seconds = count % 60;
+		int seconds =count % 60;
 		String disMinu = (minutes < 10 ? "0" : "") + minutes;
 		String disSec = (seconds < 10 ? "0" : "") + seconds;
 		String formattedTime = disMinu + ":" + disSec;
 		return formattedTime;
 	}
 	
-	public void inGameTime(int count, HashMap<String, CookieSlapPlayer> players){
+	public void ingameTimer(int count, HashMap<String, CookieSlapPlayer> players){
 		for(CookieSlapPlayer cp : players.values()){
 			cookieslap.chat.sendMessage(cp.getPlayer(), "CookieSlap is ending in 񘘡" + cookieslap.game.getDigitTIme(count));
 		}
@@ -127,7 +136,7 @@ public class GameManager {
 		ItemStack cookie = new ItemStack(Material.COOKIE);
 		cookie.addUnsafeEnchantment(Enchantment.KNOCKBACK, 25);
 		ItemMeta cookieMeta = cookie.getItemMeta();
-		cookieMeta.setDisplayName("The Magical Cookie");
+		cookieMeta.setDisplayName("Magical Cookie");
 		cookieMeta.setLore(Arrays.asList(new String[] { "�3Left-Click to knock players off the edge" }));
 		cookie.setItemMeta(cookieMeta);
 		return cookie;

@@ -69,7 +69,7 @@ public class LobbySign {
 					sign[0] = ChatColor.GOLD + "[CookieSlap]";
 					sign[1] = map.getName();
 					sign[2] = getFancyStatus(game);
-					sign[3] = ChatColor.BOLD + getPlayers(game);
+					sign[3] = ChatColor.DARK_GRAY + getPlayers(game);
 				}
 				
 				Bukkit.getScheduler().scheduleSyncDelayedTask(cookieslap, new SignDelay(sign, s), 30L);
@@ -79,7 +79,7 @@ public class LobbySign {
 				sign[0] = ChatColor.GOLD + "[CookieSlap]";
 				sign[1] = map.getName();
 				sign[2] = getFancyStatus(game);
-				sign[3] = ChatColor.BOLD + getPlayers(game);
+				sign[3] = ChatColor.DARK_GRAY + getPlayers(game);
 				setSign(sign, s);
 			}
 		}
@@ -112,9 +112,9 @@ public class LobbySign {
 		Status st = game.getStatus();
 		if(st == Status.LOBBY){
 			if(game.isStarting()){
-				status = ChatColor.AQUA + "Starting " + game.getLobbyCount();
+				status = ChatColor.BLUE + "Starting " + game.getLobbyCount();
 			} else {
-				status = ChatColor.BLUE + "Lobby";
+				status = ChatColor.AQUA + "Lobby";
 			}
 		} else if(st == Status.DISABLED){
 			status = ChatColor.DARK_RED + "Disabled";

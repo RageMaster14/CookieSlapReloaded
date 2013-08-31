@@ -21,11 +21,11 @@ public class ToggleCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String cL, String[] args) {
 		Player player = (Player) sender;
-		if(player.getScoreboard() == board.board){
+		if(player.getScoreboard() == board.getScoreboard()){
 			player.setScoreboard(scoreboard);
 			player.sendMessage(ChatColor.RED + "Scoreboard Disabled!");
 		}else if(player.getScoreboard() == scoreboard){
-			player.setScoreboard(board.board);
+			player.setScoreboard(board.getScoreboard());
 			player.sendMessage(ChatColor.GREEN + "Scoreboard Enabled!");
 		}
 		return false;

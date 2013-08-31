@@ -26,8 +26,7 @@ public class InvStore {
 		this.armour = null;
 		this.inv = null;
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	public void load(){
 		this.player.getInventory().setContents(this.inv);
 		this.player.getInventory().setArmorContents(this.armour);
@@ -38,10 +37,8 @@ public class InvStore {
 		this.player.setFireTicks(this.fire);
 		this.player.setGameMode(this.gamemode);
 		this.player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-		this.player.updateInventory();
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void save(){
 		this.inv = this.player.getInventory().getContents();
 		this.armour = this.player.getInventory().getArmorContents();
@@ -50,7 +47,6 @@ public class InvStore {
 		this.food = this.player.getFoodLevel();
 		this.fire = this.player.getFireTicks();
 		this.gamemode = this.player.getGameMode();
-		this.player.updateInventory();
 	}
 	
 	public void reset(){

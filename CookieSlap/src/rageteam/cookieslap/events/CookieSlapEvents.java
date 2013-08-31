@@ -1,16 +1,21 @@
 package rageteam.cookieslap.events;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import rageteam.cookieslap.games.Game;
 import rageteam.cookieslap.games.Status;
 import rageteam.cookieslap.main.CookieSlap;
+import rageteam.cookieslap.maps.Map;
+import rageteam.cookieslap.players.CookieSlapPlayer;
 import rageteam.cookieslap.players.UtilPlayer;
 
 public class CookieSlapEvents implements Listener {
-	
+	Map map;
+	Game game;
 	@EventHandler
 	public void onKnockOut(PlayerMoveEvent e){
 		Player player = e.getPlayer();
@@ -19,12 +24,25 @@ public class CookieSlapEvents implements Listener {
 		if(u.getGame() != null && u.isAlive()){
 			if(player.getLocation().getBlockY() < -5.0D || player.getLocation().getBlockY() < u.getGame().getLowestPossible()){
 				if(u.getGame().getStatus() == Status.INGAME){
-					CookieSlap.getCookieSlap().chat.bc("Player &e" + (CookieSlap.getCookieSlap().special.contains(player.getName()) ? "§4" : "§3") + player.getName() + " &6has been knocked out!", u.getGame());
-					CookieSlap.getCookieSlap().chat.bc("&b&l" + (u.getGame().getPlayers().size() - 1) + " PLAYERS REMAIN", u.getGame());
+					CookieSlap.getCookieSlap().chat.bc("Player &e" + (CookieSlap.getCookieSlap().special.contains(player.getName()) ? "§4" : "§3") + player.getName() + " &6has been knocked off!", u.getGame());
 					player.setFallDistance(0.0F);
-					u.getGame().leaveGame(u);
 					player.setFallDistance(0.0F);
-					CookieSlap.getCookieSlap().chat.sendMessage(player, "You have been knoced out.");
+					int c = 1;
+					for(CookieSlapPlayer cp : game.players.values()){
+						cp.getPlayer().setLevel(0);
+						
+						cp.getUtilPlayer().setAlive(true);
+						
+						if(c > map.getSpawnCount()){
+							c = 1;
+						}
+						
+						cp.getPlayer().teleport(map.getSpawn(c));
+						c++;
+						
+						cp.getPlayer().setLevel(0);
+						cp.getPlayer().setGameMode(GameMode.ADVENTURE);
+					}
 				}
 			}
 		}

@@ -32,10 +32,10 @@ public class LobbyCountdown implements Runnable{
 			game.getSign().update(game.getMap(), false);
 			
 			if(lobbycount % 10 == 0){
-				CookieSlap.getCookieSlap().chat.bc("CookieSlap starting in &b" + lobbycount + "&6.", game);
+				CookieSlap.getCookieSlap().chat.bc("&7Starting In &6" + lobbycount + "&6.", game);
 			}
 			if((lobbycount <= 5) && (lobbycount >= 1) && (lobbycount != 0)){
-				CookieSlap.getCookieSlap().chat.bc("CookieSlap starting in &b" + lobbycount + "&6.", game);
+				CookieSlap.getCookieSlap().chat.bc("&7Starting In &6" + lobbycount + "&6.", game);
 			}
 		} else {
 			if(game.getPlayers().size() > 1){

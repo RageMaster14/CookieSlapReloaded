@@ -93,7 +93,7 @@ public class PlayerListener implements Listener{
 		UtilPlayer u = CookieSlap.getCookieSlap().pm.getPlayer(player);
 		
 		if(u.getGame() != null && u.isAlive()){
-			if(!e.getMessage().startsWith("/cs") && !(player.isOp() || player.hasPermission("cookieslap.admin"))){
+			if(!e.getMessage().startsWith("/cslap") && !(player.isOp() || player.hasPermission("cookieslap.admin"))){
 				e.setCancelled(true);
 				CookieSlap.getCookieSlap().chat.sendMessage(player, "&eYou cannot use commands in &bCookieSlap");
 			}
