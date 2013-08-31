@@ -9,19 +9,20 @@ import org.bukkit.World;
 import rageteam.cookieslap.main.CookieSlap;
 
 public class LobbySignUtils {
+	
 	public static LobbySignUtils lsu = new LobbySignUtils();
 	
-	public static LobbySignUtils get() {
+	public static LobbySignUtils get(){
 		return lsu;
 	}
 	
-	public boolean isLobbySign(Location location, String name) {
+	public boolean isLobbySign(Location location, String name){
 		String locString = locationToString(location);
 		List<String> signLocs = CookieSlap.getCookieSlap().maps.c.maps.getStringList("Signs." + name + ".lobby");
-	return signLocs.contains(locString);
+		return signLocs.contains(locString);
 	}
 	
-	public String locationToString(Location l) {
+	public String locationToString(Location l){
 		String w = l.getWorld().getName();
 		int x = l.getBlockX();
 		int y = l.getBlockY();
@@ -38,7 +39,7 @@ public class LobbySignUtils {
 		return new Location(w, x, y, z);
 	}
 	
-	public boolean comparLocations(Location one, Location two) {
+	public boolean comapreLocations(Location one, Location two){
 		String w = one.getWorld().getName();
 		int x = one.getBlockX();
 		int y = one.getBlockY();
@@ -51,4 +52,4 @@ public class LobbySignUtils {
 		
 		return (w.equalsIgnoreCase(checkw)) && (x == checkx) && (y == checky) && (z == checkz);
 	}
-} 
+}

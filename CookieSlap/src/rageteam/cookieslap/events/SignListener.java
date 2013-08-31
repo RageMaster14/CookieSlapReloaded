@@ -17,33 +17,32 @@ import rageteam.cookieslap.lobby.LobbySignUtils;
 import rageteam.cookieslap.main.CookieSlap;
 import rageteam.cookieslap.misc.Permissions;
 
-public class SignListener implements Listener{
+public class SignListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void signPlace(SignChangeEvent e){
 		Player player = e.getPlayer();
 		Permissions perms = new Permissions(player);
 		
-		if(e.getLine(0).equalsIgnoreCase("[cs]") && perms.canModifyMaps()){
+		if(e.getLine(0).equalsIgnoreCase("[cookieslap]") && perms.canModifyMaps()){
 			String map = e.getLine(1);
 			if(CookieSlap.getCookieSlap().maps.mapExists(map)){
 				LobbySign ls = new LobbySign(CookieSlap.getCookieSlap().maps.getMap(map), CookieSlap.getCookieSlap());
 				ls.create(e.getBlock().getLocation(), CookieSlap.getCookieSlap().maps.getMap(map));
-				CookieSlap.getCookieSlap().chat.sendMessage(player, "You have created a lobby sign for §b" + map + "&6.");
+				CookieSlap.getCookieSlap().chat.sendMessage(player, "You have created a lobby sign for §e" + map + "&e.");
 			}
 		}
 	}
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e){
-		
-		if ((e.hasBlock()) && ((e.getClickedBlock().getType() == Material.WALL_SIGN) || (e.getClickedBlock().getType() == Material.SIGN) || (e.getClickedBlock().getType() == Material.SIGN_POST)) && (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+		if ((e.hasBlock()) && ((e.getClickedBlock().getType() == Material.WALL_SIGN) || (e.getClickedBlock().getType() == Material.SIGN) || (e.getClickedBlock().getType() == Material.SIGN_POST)) && (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)){
 			Sign s = (Sign) e.getClickedBlock().getState();
 			Player player = e.getPlayer();
 			if(s.getLine(0).equalsIgnoreCase(ChatColor.GOLD + "[CookieSlap]")){
 				String map = ChatColor.stripColor(s.getLine(1));
 				if(CookieSlap.getCookieSlap().maps.mapExists(map)){
-					player.chat("/cs join " + map);
+					player.chat("/cslap join " + map);
 					e.setCancelled(true);
 				} else {
 					CookieSlap.getCookieSlap().chat.sendMessage(player, "&cMap does not exist!");
@@ -56,8 +55,9 @@ public class SignListener implements Listener{
 	@EventHandler
 	public void signBreak(BlockBreakEvent e){
 		Player player = e.getPlayer();
-		if(e.getBlock().getType() == Material.WALL_SIGN || e.getBlock().getType() == Material.SIGN_POST){
-			Sign s = (Sign)e.getBlock().getState();
+		
+		if (e.getBlock().getType() == Material.WALL_SIGN || e.getBlock().getType() == Material.SIGN_POST) {
+			Sign s = (Sign) e.getBlock().getState();
 			String[] lines = s.getLines();
 			
 			String map = ChatColor.stripColor(lines[1]);
@@ -65,12 +65,14 @@ public class SignListener implements Listener{
 			if(LobbySignUtils.get().isLobbySign(e.getBlock().getLocation(), map)){
 				Permissions perms = new Permissions(player);
 				if(perms.canModifyMaps()){
+					
 					LobbySign sign = new LobbySign(CookieSlap.getCookieSlap().maps.getMap(map), CookieSlap.getCookieSlap());
 					sign.delete(e.getBlock().getLocation());
-					CookieSlap.getCookieSlap().chat.sendMessage(player, "You have successfully removed a cookieslap sign for the map &c" + map + "&6.");
+					
+					CookieSlap.getCookieSlap().chat.sendMessage(player, "Remove a lobby sign for the map &3" + map + "&e.");
 				} else {
 					e.setCancelled(true);
-					CookieSlap.getCookieSlap().chat.sendMessage(player, "You cannot remove that sign");
+					CookieSlap.getCookieSlap().chat.sendMessage(player, "You cannot breakt a lobby sign!");
 				}
 			}
 		}

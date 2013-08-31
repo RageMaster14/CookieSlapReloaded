@@ -34,7 +34,7 @@ public class GameManager {
 		
 		game.status = Status.INGAME;
 		game.time = 240;
-		game.setLobbyCount(31);
+		game.setLobbyCount(cookieslap.getConfig().getInt("auto-start.time"));
 		
 		int c = 1;
 		
@@ -45,6 +45,7 @@ public class GameManager {
 		Map map = game.getMap();
 		
 		ScoreboardUtils.get().hideScoreAll(game, "Starting in");
+		ScoreboardUtils.get().hideScoreAll(game, "Queue");
 		
 		for(CookieSlapPlayer cp : game.players.values()){
 			cp.getPlayer().setLevel(0);
@@ -62,7 +63,7 @@ public class GameManager {
 			cp.getPlayer().setGameMode(GameMode.ADVENTURE);
 			
 			//give items
-			for(int i = 0; i < 1; i++){
+			for(int i = 0; i < 2; i++){
 				cp.getPlayer().getInventory().setItem(i, getCookie());
 			}
 		}
@@ -80,7 +81,7 @@ public class GameManager {
 		game.stopGameTimer();
 		
 		game.setLobbyCount(31);
-		game.time = 601;
+		game.time = 240;
 		game.setStatus(Status.LOBBY);
 		
 		game.resetArena();

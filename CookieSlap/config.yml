@@ -1,7 +1,6 @@
 auto-start:
   players: 4
+  time: 30
 auto-update: true
-economy:
-  use: false
-  win: 50
-  kill: 5
+joinMessages: true
+graceperiod: 0

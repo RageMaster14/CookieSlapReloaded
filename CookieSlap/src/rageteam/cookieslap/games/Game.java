@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import rageteam.cookieslap.lobby.LobbySign;
 import rageteam.cookieslap.main.CookieSlap;
+import rageteam.cookieslap.main.ScoreboardUtils;
 import rageteam.cookieslap.maps.Map;
 import rageteam.cookieslap.players.CookieSlapPlayer;
 import rageteam.cookieslap.players.UtilPlayer;
@@ -39,8 +40,8 @@ public class Game {
 	int small;
 	int counter = 0;
 	int timer = 0;
-	private boolean	starting;
-	private LobbySign sign;
+	boolean	starting;
+	LobbySign sign;
 	
 	public Game(CookieSlap cookieslap, Map map) {
 		this.cookieslap = cookieslap;
@@ -51,7 +52,7 @@ public class Game {
 		this.floor = new HashSet<Location>();
 		this.data = new ArrayList<Rollback>();
 		time = 601;
-		setLobbyCount(31);
+		lobbycount = 31;
 		y1 = 0;
 		y2 = 0;
 		small = -1;
@@ -64,7 +65,15 @@ public class Game {
 	}
 	
 	public void startGameTimer() {
-		this.timer = Bukkit.getScheduler().scheduleSyncRepeatingTask(cookieslap, new GameTime(cookieslap, this), 0L, 20L);
+		final Game game = this;
+		int grace = cookieslap.getConfig().getInt("graceperiod");
+		cookieslap.chat.bc("Grace Period (" + grace + "s)", game);
+		new BukkitRunnable(){
+			public void run(){
+				cookieslap.chat.bc("Grace Period Over!", game);
+				timer = Bukkit.getScheduler().scheduleSyncRepeatingTask(cookieslap, new GameTime(cookieslap, game), 0L, 20L);
+			}
+		}.runTaskLater(cookieslap, 20 * grace);
 	}
 	
 	public void stopGameTimer() {
@@ -143,6 +152,12 @@ public class Game {
 						players.put(player.getName(), cp);
 						u.setGame(cookieslap.games.getGame(name));
 						
+						if(map.lobbySet()){
+							player.teleport(map.getLobby());
+						} else {
+							player.teleport(cookieslap.config.getLobby());
+						}
+						
 						player.teleport(cookieslap.config.getLobby());
 						
 						cookieslap.chat.sendMessage(player, "You have been teleported to the cookieslap lobby");
@@ -151,6 +166,7 @@ public class Game {
 						
 						cookieslap.chat.sendMessage(player, "You have joined the lobby for map §c" + map.getName() + "§6.");
 						
+						ScoreboardUtils.get().setScoreAll(this,"Queue", players.size());
 						
 						if (this.players.size() >= cookieslap.getConfig().getInt("auto-start.players") && (!this.isStarting())){
 							startCountdown();
@@ -179,15 +195,24 @@ public class Game {
 							players.put(player.getName(), cp);
 							u.setGame(cookieslap.games.getGame(name));
 							
-							player.teleport(cookieslap.config.getLobby());
+							if (map.lobbySet()){
+								player.teleport(map.getLobby());
+							} else {
+								player.teleport(cookieslap.config.getLobby());
+							}
 							
 
-							cookieslap.chat.sendMessage(player, "You have been teleported to the cookieslap lobby. You will be teleported to the map on the game start.");
+							cookieslap.chat.sendMessage(player, "You have been teleported to the cookieslap lobby.");
 
 							cookieslap.chat.sendMessage(player, "Players in your game: " + getPlayersIn());
+							
+							ScoreboardUtils.get().setScoreAll(this, "Queue", players.size());
 
 							cookieslap.chat.sendMessage(player, "You have joined the lobby for map §c" + map.getName() + "§6.");
-							cookieslap.chat.bcNotForPlayer(player, (cookieslap.special.contains(player.getName()) ? "§4" : "§a") + player.getName() + "&6 has joined the game. &e" + players.size() + "/" + max, this);
+							
+							if(cookieslap.getConfig().getBoolean("joinMessages")){
+								cookieslap.chat.bcNotForPlayer(player, (cookieslap.special.contains(player.getName()) ? "§4" : "§a") + player.getName() + "&6 has joined the game. &e" + players.size() + "/" + max, this);
+							}
 
 							if (this.players.size() >= cookieslap.getConfig().getInt("auto-start.players") && (!this.isStarting())) {
 								startCountdown();
@@ -209,7 +234,7 @@ public class Game {
 		String p = "";
 		
 		for(CookieSlapPlayer cp : players.values()){
-			p = (cookieslap.special.contains(cp.getPlayer().getName()) ? "§4" : "§a") + cp.getPlayer().getName() + "§6, " +p;  
+			p = (cookieslap.special.contains(cp.getPlayer().getName()) ? "§4" : "§a") + cp.getPlayer().getName() + "§6, " + p;  
 		}
 		
 		return p;
@@ -219,7 +244,7 @@ public class Game {
 		Bukkit.getScheduler().cancelTask(counter);
 		
 		if(this.status == Status.LOBBY){
-			this.setLobbyCount(31);
+			lobbycount = cookieslap.getConfig().getInt("auto-start.time");
 			for (CookieSlapPlayer cp : players.values()){
 				cp.getPlayer().setLevel(getLobbyCount());
 				cp.getScoreboard().setScore("Starting in", getLobbyCount());
@@ -230,6 +255,9 @@ public class Game {
 	}
 	
 	public void leaveGame(UtilPlayer u){
+		if(status == Status.ENDING || status == Status.INGAME){
+			ScoreboardUtils.get().setScoreAll(this, "Players Left", players.size());
+		}
 		players.remove(u.getName());
 		u.getPlayer().teleport(cookieslap.config.getLobby());
 		u.setGame(null);

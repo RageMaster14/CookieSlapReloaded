@@ -93,7 +93,7 @@ public class CookieSlap extends JavaPlugin{
 		getServer().getPluginManager().registerEvents(new CookieSlapEvents(), this);
 		getServer().getPluginManager().registerEvents(new SignListener(), this);
 		
-		getCommand("cookieslap").setExecutor(new CookieSlapCommand());
+		getCommand("cslap").setExecutor(new CookieSlapCommand());
 		getCommand("toggleboard").setExecutor(toggleCmd);
 		
 		for(Player players : Bukkit.getOnlinePlayers()) {
