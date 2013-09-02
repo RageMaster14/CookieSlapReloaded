@@ -13,131 +13,138 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import rageteam.cookieslap.main.CookieSlap;
-import rageteam.cookieslap.main.CookieSlapBoard;
 import rageteam.cookieslap.main.ScoreboardUtils;
 import rageteam.cookieslap.maps.Map;
 import rageteam.cookieslap.players.CookieSlapPlayer;
-import rageteam.cookieslap.players.UtilPlayer;
+public class GameManager extends JavaPlugin {
+	CookieSlap splegg;
 
-public class GameManager extends JavaPlugin{
-	
-	CookieSlap cookieslap;
-	UtilPlayer u;
-	public CookieSlapBoard ingame;
-	public int timeleft = 240;
-	Game game;
-	
-	public GameManager(CookieSlap cookieslap){
-		this.cookieslap = cookieslap;
+	public GameManager(CookieSlap splegg) {
+		this.splegg = splegg;
 	}
-	
-	public void startGame(final Game game){
-		cookieslap.chat.log("New game commencing..");
-		
+
+	public void startGame(Game game) {
+
+		splegg.chat.log("New game commencing..");
+
 		game.startGameTimer();
-		
+
 		Bukkit.getScheduler().cancelTask(game.counter);
-		
+
 		game.status = Status.INGAME;
-		game.time = 240;
-		game.setLobbyCount(cookieslap.getConfig().getInt("auto-start.time"));
-		
+		game.time = 901;
+		game.setLobbyCount(splegg.getConfig().getInt("auto-start.time"));
+
 		int c = 1;
-		
+
 		game.loadFloors();
-		
-		cookieslap.chat.bc("You are playing on &2 " + game.getMap().getName() + " &6.", game);
-		
+
+		splegg.chat.bc("You are playing on &e" + game.getMap().getName()
+				+ "&6.", game);
+
 		Map map = game.getMap();
-		
+
 		ScoreboardUtils.get().hideScoreAll(game, "Starting in");
 		ScoreboardUtils.get().hideScoreAll(game, "Queue");
 		ScoreboardUtils.get().setScoreAll(game, ChatColor.DARK_AQUA + "Players:", game.getPlayers().size());
 		ScoreboardUtils.get().setScoreAll(game, ChatColor.YELLOW + "HighScore:", 1);
-		ScoreboardUtils.get().setScoreAll(game, ChatColor.GREEN + "Arena #:", game.getMap().getCount());
-		
-		for(CookieSlapPlayer cp : game.players.values()){
-			cp.getPlayer().setLevel(0);
-			
-			cp.getUtilPlayer().setAlive(true);
-			
-			if(c > map.getSpawnCount()){
+		ScoreboardUtils.get().setScoreAll(game, ChatColor.GREEN + "Arena ID:", 1);
+
+		for (CookieSlapPlayer sp : game.players.values()) {
+
+			sp.getPlayer().setLevel(0);
+
+			sp.getUtilPlayer().setAlive(true);
+
+			if (c > map.getSpawnCount()) {
 				c = 1;
 			}
-			
-			cp.getPlayer().teleport(map.getSpawn(c));
+
+			sp.getPlayer().teleport(map.getSpawn(c));
 			c++;
-			
-			cp.getPlayer().setLevel(0);
-			cp.getPlayer().setGameMode(GameMode.ADVENTURE);
-			
-			//give items
-			for(int i = 0; i < 1; i++){
-				cp.getPlayer().getInventory().setItem(i, getCookie());
+
+			sp.getPlayer().setLevel(0);
+			sp.getPlayer().setGameMode(GameMode.ADVENTURE);
+
+			// give items
+			for (int i = 0; i < 9; i++) {
+				sp.getPlayer().getInventory().setItem(i, getCookie());
 			}
+
 		}
-		
+
 		game.getSign().update(map, false);
-		
-		cookieslap.chat.bc("Use your cookie to knock other players off of the map", game);
+
+		splegg.chat.bc("Use your Cookie to knock other players out.", game);
+
 	}
-	
-	public void stopGame(Game game, int r){
-		cookieslap.chat.log("Commencing Shutdown of " + game.getMap().getName() + ".");
-		
+
+	public void stopGame(Game game, int r) {
+
+		splegg.chat.log("Commencing shutdown of " + game.getMap().getName()
+				+ ".");
+
 		game.status = Status.ENDING;
-		
+
 		game.stopGameTimer();
-		
+
 		game.setLobbyCount(31);
-		game.time = 240;
+		game.time = 601;
 		game.setStatus(Status.LOBBY);
-		
+
 		game.resetArena();
 		game.data.clear();
 		game.floor.clear();
-		
+
 		game.setStarting(false);
-		
-		HashMap<String, CookieSlapPlayer> h = new HashMap<String, CookieSlapPlayer>(game.players);
+
+		HashMap<String, CookieSlapPlayer> h = new HashMap<String, CookieSlapPlayer>(
+				game.players);
 		game.players.clear();
-		
-		for(CookieSlapPlayer cp : h.values()){
-			game.leaveGame(cp.getUtilPlayer());
+
+		for (CookieSlapPlayer sp : h.values()) {
+
+			game.leaveGame(sp.getUtilPlayer());
+
 		}
-		
-		if(r != 5){
-			cookieslap.chat.bc("CookieSlap has ended on the map " + game.getMap().getName() + ".");
+
+		if (r != 5) {
+			splegg.chat.bc("Splegg has ended on the map "
+					+ game.getMap().getName() + ".");
 		}
-		
-		if(!cookieslap.disabling){
+
+		if (!splegg.disabling) {
 			game.getSign().update(game.map, true);
 		}
-		
-		cookieslap.chat.log("Game has reset.");
+
+		splegg.chat.log("Game has reset.");
+
 	}
-	
-	public String getDigitTIme(int count){
+
+	public String getDigitTime(int count) {
 		int minutes = count / 60;
-		int seconds =count % 60;
+		int seconds = count % 60;
 		String disMinu = (minutes < 10 ? "0" : "") + minutes;
 		String disSec = (seconds < 10 ? "0" : "") + seconds;
 		String formattedTime = disMinu + ":" + disSec;
 		return formattedTime;
 	}
-	
-	public void ingameTimer(int count, HashMap<String, CookieSlapPlayer> players){
-		for(CookieSlapPlayer cp : players.values()){
-			cookieslap.chat.sendMessage(cp.getPlayer(), "CookieSlap is ending in §5§1" + cookieslap.game.getDigitTIme(count));
+
+	public void ingameTimer(int count, HashMap<String, CookieSlapPlayer> players) {
+		for (CookieSlapPlayer sp : players.values()) {
+			splegg.chat.sendMessage(sp.getPlayer(), "Splegg is ending in §5§l"
+					+ splegg.game.getDigitTime(count));
 		}
 	}
-	
-	public ItemStack getCookie(){
+
+	public ItemStack getCookie() {
 		ItemStack cookie = new ItemStack(Material.COOKIE);
 		cookie.addUnsafeEnchantment(Enchantment.KNOCKBACK, 25);
 		ItemMeta cookieMeta = cookie.getItemMeta();
 		cookieMeta.setDisplayName("Magical Cookie");
-		cookieMeta.setLore(Arrays.asList(new String[] { "§3Left-Click to knock players off the edge" }));
+		cookieMeta
+				.setLore(Arrays
+						.asList(new String[] { "§3Left-Click to knock players off the edge" }));
 		cookie.setItemMeta(cookieMeta);
 		return cookie;
 	}

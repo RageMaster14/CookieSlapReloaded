@@ -154,6 +154,14 @@ public class CookieSlapCommand implements CommandExecutor {
 						CookieSlap.getCookieSlap().chat.sendMessage(player,
 								"&cYou do not have permission.");
 					}
+			}else if(args.length == 2){
+				if(args[0].equalsIgnoreCase("setlobby")){
+					if(perms.canModifyMaps()){
+						@SuppressWarnings("unused")
+						String name = args[1];
+					}
+				}
+					
 				} else if (args[0].equalsIgnoreCase("help")) {
 					// CookieSlap.getCookieSlap().chat.sendMessage(player,
 					// "&b--- &4&lCookieSlap Help &b---");

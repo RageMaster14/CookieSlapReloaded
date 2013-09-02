@@ -28,20 +28,21 @@ public class CookieSlapEvents implements Listener {
 					player.setFallDistance(0.0F);
 					player.setFallDistance(0.0F);
 					int c = 1;
-					for(CookieSlapPlayer cp : game.players.values()){
-						cp.getPlayer().setLevel(0);
-						
-						cp.getUtilPlayer().setAlive(true);
-						
-						if(c > map.getSpawnCount()){
-							c = 1;
+					for (CookieSlapPlayer sp : game.players.values()) {
+
+						sp.getPlayer().setLevel(0);
+
+						sp.getUtilPlayer().setAlive(true);
+
+						if (c > map.getSpawnCount()) {
+						c = 1;
 						}
-						
-						cp.getPlayer().teleport(map.getSpawn(c));
+
+						sp.getPlayer().teleport(map.getSpawn(c));
 						c++;
-						
-						cp.getPlayer().setLevel(0);
-						cp.getPlayer().setGameMode(GameMode.ADVENTURE);
+
+						sp.getPlayer().setLevel(0);
+						sp.getPlayer().setGameMode(GameMode.ADVENTURE);
 					}
 				}
 			}

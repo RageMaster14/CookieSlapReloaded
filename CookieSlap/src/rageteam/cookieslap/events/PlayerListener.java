@@ -1,10 +1,8 @@
 package rageteam.cookieslap.events;
 
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -25,20 +23,6 @@ public class PlayerListener implements Listener{
 			if(u.getGame() != null && u.isAlive()){
 				e.setCancelled(true);
 				e.setFoodLevel(20);
-			}
-		}
-	}
-	
-	@EventHandler
-	public void entityDamage(EntityDamageEvent e){
-		Entity ent = e.getEntity();
-		
-		if(ent instanceof Player){
-			Player player = (Player)ent;
-			UtilPlayer u = CookieSlap.getCookieSlap().pm.getPlayer(player);
-			
-			if(u.getGame() != null && u.isAlive()){
-				e.setCancelled(true);
 			}
 		}
 	}
