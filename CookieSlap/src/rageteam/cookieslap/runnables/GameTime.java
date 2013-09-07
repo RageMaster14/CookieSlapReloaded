@@ -18,16 +18,15 @@ public class GameTime implements Runnable {
 
 	@Override
 	public void run() {
-		if(game.getCount() != -1){
-			if(game.getCount() != 0){
-				ScoreboardUtils.get().setScoreAll(game, ChatColor.LIGHT_PURPLE + "Time Left:", game.getCount());
+		if(timeleft != -1){
+			if(timeleft != 0){
+				ScoreboardUtils.get().setScoreAll(game, ChatColor.LIGHT_PURPLE + "Time Left:", timeleft);
+				timeleft--;
 			} 
-		} else {
-
+		} else if(timeleft == 0){
 			game.stopGameTimer();
 			splegg.chat.bc("&dTime limit reached.", game);
 			splegg.game.stopGame(game, 1);
-
 		}
 
 	}

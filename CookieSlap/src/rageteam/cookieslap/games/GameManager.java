@@ -109,7 +109,7 @@ public class GameManager extends JavaPlugin {
 		}
 
 		if (r != 5) {
-			splegg.chat.bc("Splegg has ended on the map "
+			splegg.chat.bc("CookieSlap has ended on the map "
 					+ game.getMap().getName() + ".");
 		}
 
