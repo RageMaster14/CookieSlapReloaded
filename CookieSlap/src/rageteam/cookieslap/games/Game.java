@@ -313,6 +313,7 @@ public class Game {
 		return this.small;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean loadFloors() {
 
 		this.floor.clear();
@@ -353,6 +354,7 @@ public class Game {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void resetArena() {
 		for (Rollback d : data) {
 			Location l = new Location(Bukkit.getWorld(d.getWorld()), d.getX(),
