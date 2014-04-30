@@ -1,12 +1,12 @@
-name: CookieSlap
-description: A Reloaded version of CookieSlap!
-authors: [Xquiset]
+name: CookieSlapReloaded
+description: A Remake Of CookieSlap
+authors: [CrazymanJR]
 version: 0.0.1a
 main: rageteam.cookieslap.main.CookieSlap
 softdepend: [WorldEdit]
 commands:
    cslap:
-      description: CookieSlap
+      description: A Remake of CookieSlap
    toggleboard:
       description: This Will Turn The Scoreboard ON/OFF
       alias: [tb]
